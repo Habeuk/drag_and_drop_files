@@ -1,0 +1,14 @@
+{
+    "name": "habeuk/drag_and_drop_files",
+    "description": "Add a field allowing drag and drop",
+    "type": "drupal-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kouwa stephane",
+            "email": "kksasteph888@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
