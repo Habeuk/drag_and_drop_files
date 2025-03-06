@@ -1,0 +1,11 @@
+@use "@stephane888/wbu-atomique/scss/wbu-ressources-clean.scss" as *;
+.dnd-dropzone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.dnd-dropzone.dragover {
+  border-color: #007bff;
+}

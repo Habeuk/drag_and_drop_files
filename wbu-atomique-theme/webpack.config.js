@@ -17,23 +17,21 @@ plugins.push(
     chunkFilename: "[id].css",
   })
 );
-console.log("devMode : ", devMode);
+// console.log("devMode : ", devMode);
 module.exports = {
   plugins,
   mode: env || "development", // On définit le mode en fonction de la valeur de NODE_ENV
   entry: {
-    popin: "./src/js/popin-drupal.js",
+    dnd: "./src/js/dnd.js",
   },
   output: {
-    //path: path.resolve(__dirname, "../css/"),
     path: path.resolve(__dirname, "../css/"),
-    // publicPath: "/dist/",
     filename: "../js/[name].js",
   },
   devtool: devMode ? "inline-source-map" : false,
   module: {
     rules: [
-      //règles de compilations pour les fichiers .js
+      // règles de compilations pour les fichiers .js
       {
         test: /\.js$/,
         exclude: /node_modules/,
