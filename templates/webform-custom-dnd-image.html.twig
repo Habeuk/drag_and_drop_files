@@ -1,0 +1,12 @@
+<div class="webform-dnd-container">
+  <div class="dnd-dropzone" data-drupal-selector="dnd-dropzone">
+    <div class="dnd-label">{{ 'Glissez votre image ici ou cliquez pour uploader'|t }}</div>
+    <input 
+      type="file" 
+      class="dnd-file-input" 
+      accept="image/*" 
+      data-drupal-selector="{{ element['#name'] }}"
+    >
+  </div>
+  <div class="dnd-preview"></div>
+</div>

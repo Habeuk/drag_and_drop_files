@@ -1,0 +1,22 @@
+.webform-dnd-container {
+  margin: 1rem 0;
+  border: 2px dashed #ddd;
+  padding: 20px;
+}
+
+.dnd-dropzone {
+  cursor: pointer;
+  text-align: center;
+  padding: 30px;
+}
+
+.dnd-dropzone.dragover {
+  border-color: #007bff;
+  background: #f8f9fa;
+}
+
+.dnd-preview img {
+  margin-top: 1rem;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}

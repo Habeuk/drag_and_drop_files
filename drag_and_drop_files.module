@@ -1,0 +1,22 @@
+<?php
+
+/**
+ *
+ * @file
+ * Primary module hooks for Drag and drop files module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function drag_and_drop_files_theme() {
+  return [
+    'drag_and_drop_files' => [
+      'render element' => 'element'
+    ],
+    'webform_custom_dnd_image' => [
+      'render element' => 'element',
+      'template' => 'webform-custom-dnd-image'
+    ]
+  ];
+}

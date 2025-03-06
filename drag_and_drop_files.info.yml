@@ -1,0 +1,7 @@
+name: 'Drag and drop files'
+type: module
+description: 'Add a field allowing drag and drop'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - file:file

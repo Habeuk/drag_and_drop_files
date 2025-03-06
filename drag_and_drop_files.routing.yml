@@ -1,0 +1,8 @@
+drag_and_drop_files.upload:
+  path: '/drag_and_drop_files/upload'
+  defaults:
+    _controller: '\Drupal\drag_and_drop_files\Controller\UploadController::handleUpload'
+    _title: 'Upload via Drag & Drop'
+  methods: [POST]
+  requirements:
+    _permission: 'upload files'

@@ -1,0 +1,22 @@
+webform-dnd:
+  version: 1.0
+  css:
+    theme:
+      css/webform-dnd.css: {}
+  js:
+    js/webform-dnd.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+dnd:
+  version: 1.0
+  css:
+    theme:
+      css/dnd.css: {}
+  js:
+    js/dnd.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
