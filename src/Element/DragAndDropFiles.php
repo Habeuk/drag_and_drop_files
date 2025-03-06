@@ -14,43 +14,69 @@ use Drupal\Core\Render\Element\FormElementBase;
 class DragAndDropFiles extends FormElementBase {
   
   public function getInfo() {
+    $class = static::class;
     return [
       '#input' => TRUE,
       '#process' => [
-        self::class . '::process'
+        $class . '::process'
       ],
       '#theme' => 'drag_and_drop_files',
       '#theme_wrappers' => [
         'form_element'
-      ]
+      ],
+      '#pre_render' => [
+        $class . '::preRender'
+      ],
+      '#drag_and_drop_files_type' => '*'
     ];
   }
   
   public static function process(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Ajoutez les bibliothèques CSS/JS.
     $element['#attached']['library'][] = 'drag_and_drop_files/dnd';
-    
-    // Ajoutez une zone de dépôt et un input de fichier caché.
-    $element['dropzone'] = [
-      '#markup' => '<div class="dnd-dropzone"><div class="dnd-label">Glissez une image ici ou cliquez pour sélectionner</div></div>'
+    $types = [
+      'image/*',
+      'video/*'
     ];
-    $name = !empty($element['#name']) ? $element['#name'] : 'dnd_upload';
-    $element['upload'] = [
+    $accept = '*';
+    if (!empty($element['#drag_and_drop_files_type']) && in_array($element['#drag_and_drop_files_type'], $types)) {
+      $accept = $element['#drag_and_drop_files_type'];
+    }
+    /**
+     * On enregistre le fichier via ajax.
+     *
+     * @var string $name
+     */
+    $name = !empty($element['#name']) ? $element['#name'] . 'dnd' : 'dnd_upload';
+    $element[$name] = [
       '#type' => 'file',
       '#name' => $name,
       '#attributes' => [
         'class' => [
           'dnd-file-input'
         ],
-        'accept' => 'image/*'
+        'accept' => $accept
       ]
     ];
-    $element['fid'] = [
+    $element[$name . '-fid'] = [
       '#type' => 'hidden',
       '#name' => $name . '[fid]',
-      '#value' => null
+      '#value' => null,
+      '#attributes' => [
+        'class' => [
+          'drag_and_drop_files--fids'
+        ]
+      ]
     ];
     
+    return $element;
+  }
+  
+  /**
+   * Prerender callback pour l'élément de formulaire.
+   */
+  public static function preRender(array $element) {
+    // Ajoute des attributs supplémentaires au wrapper
     return $element;
   }
 }
