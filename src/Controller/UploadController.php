@@ -36,8 +36,9 @@ class UploadController extends ControllerBase {
           'uid' => \Drupal::currentUser()->id(),
           'filename' => $file->getClientOriginalName(),
           'uri' => $destination . $file->getClientOriginalName(),
-          'status' => 1
+          'status' => 0 // pendant la phase de test.
         ]);
+      
       $file_entity->save();
       
       // Déplacez le fichier temporaire vers la destination finale
@@ -45,7 +46,8 @@ class UploadController extends ControllerBase {
       
       return new JsonResponse([
         'fid' => $file_entity->id(),
-        'url' => \Drupal::service('file_url_generator')->generateAbsoluteString($file_entity->getFileUri())
+        'url' => \Drupal::service('file_url_generator')->generateAbsoluteString($file_entity->getFileUri()),
+        'filename' => $file_entity->getFilename()
       ]);
     }
     

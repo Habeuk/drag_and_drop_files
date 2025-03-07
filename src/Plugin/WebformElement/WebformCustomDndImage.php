@@ -81,10 +81,11 @@ class WebformCustomDndImage extends WebformElementBase {
     // // Structure de l'élément
     // $element['#theme'] = 'webform_custom_dnd_image';
     $element['#type'] = 'drag_and_drop_files';
-    $element['#process'][] = [
-      '\Drupal\drag_and_drop_files\Element\DragAndDropFiles',
-      'process'
-    ];
+    // $element['#process'][] = [
+    // '\Drupal\drag_and_drop_files\Element\DragAndDropFiles',
+    // 'process'
+    // ];
+    $element['#drag_and_drop_files_type'] = 'image/*';
   }
   
   /**

@@ -1,11 +1,85 @@
 @use "@stephane888/wbu-atomique/scss/wbu-ressources-clean.scss" as *;
-.dnd-dropzone {
-  border: 2px dashed #ccc;
-  padding: 20px;
-  text-align: center;
-  margin: 10px 0;
-}
 
-.dnd-dropzone.dragover {
-  border-color: #007bff;
+.drag_and_drop_files {
+  .dnd-dropzone {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: $wbu-margin;
+    background-color: rgba($wbu-color-primary, 25%);
+  }
+
+  .dnd-dropzone.dragover {
+    border-color: $wbu-color-primary;
+  }
+
+  .form-item-dragdnd {
+    display: none;
+  }
+  .dnd-file-input {
+    display: none;
+  }
+}
+.dnd-previews {
+  .container_image {
+    display: flex;
+    padding: $wbu-margin * 0.5;
+    background-color: rgba($wbu-color-primary, 10%);
+    border: 1px solid #efefef;
+    border-radius: $wbu-margin * 0.5;
+    .content_text {
+      display: flex;
+      flex: 1 1 auto;
+      flex-wrap: wrap;
+      line-height: 1;
+      flex-direction: column;
+      justify-content: center;
+      .imge_title {
+        margin-bottom: 0.7rem;
+        font-size: 95%;
+        width: calc(100% - 40px);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+    .content_bg {
+      background-color: #cccdce;
+      border: 1px solid #dddbdb;
+      border-radius: $wbu-margin * 0.5;
+      height: 70px;
+      width: 70px;
+      background-size: cover;
+      margin-right: $wbu-margin * 0.35;
+    }
+    .progressbar {
+      width: calc(100% - 40px);
+      height: 7px;
+      background: #ccc;
+      border-radius: 3px;
+      position: relative;
+      &::before {
+        content: "";
+        display: block;
+        height: 100%;
+        width: 0;
+        background: $wbu-color-primary;
+        border-radius: 3px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: auto;
+        bottom: 0;
+        @include WBUtransition($temps: 2s);
+      }
+      &.complete {
+        &::before {
+          width: 100%;
+        }
+      }
+    }
+    + .container_image {
+      margin-top: 10px;
+    }
+  }
 }

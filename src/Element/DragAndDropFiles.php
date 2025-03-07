@@ -31,6 +31,13 @@ class DragAndDropFiles extends FormElementBase {
     ];
   }
   
+  /**
+   *
+   * @param array $element
+   * @param FormStateInterface $form_state
+   * @param array $complete_form
+   * @return string
+   */
   public static function process(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Ajoutez les bibliothèques CSS/JS.
     $element['#attached']['library'][] = 'drag_and_drop_files/dnd';
@@ -77,6 +84,7 @@ class DragAndDropFiles extends FormElementBase {
    */
   public static function preRender(array $element) {
     // Ajoute des attributs supplémentaires au wrapper
+    $element['#attributes']['class'][] = 'drag_and_drop_files';
     return $element;
   }
 }
