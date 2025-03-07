@@ -18,11 +18,12 @@ class UploadController extends ControllerBase {
     $error = [];
     
     // Validation du fichier
-    if ($file->getClientMimeType() !== 'image/png' && $file->getClientMimeType() !== 'image/jpeg') {
+    if (!str_contains($file->getClientMimeType(), "image/")) {
       $error[] = 'Seuls les fichiers PNG/JPEG sont autorisés.';
+      $error['mine-type'] = $file->getClientMimeType();
     }
     
-    if ($file->getSize() > 2 * 1024 * 1024) { // 2MB max
+    if ($file->getSize() > 20 * 1024 * 1024) { // 20 Mo
       $error[] = 'Le fichier est trop volumineux.';
     }
     
@@ -52,7 +53,7 @@ class UploadController extends ControllerBase {
     }
     
     return new JsonResponse([
-      'errors' => $errors
+      'errors' => $error
     ], 400);
   }
 }

@@ -7,6 +7,7 @@
     text-align: center;
     margin-bottom: $wbu-margin;
     background-color: rgba($wbu-color-primary, 25%);
+    border-radius: 1rem;
   }
 
   .dnd-dropzone.dragover {
@@ -22,6 +23,7 @@
 }
 .dnd-previews {
   .container_image {
+    position: relative;
     display: flex;
     padding: $wbu-margin * 0.5;
     background-color: rgba($wbu-color-primary, 10%);
@@ -34,6 +36,7 @@
       line-height: 1;
       flex-direction: column;
       justify-content: center;
+      max-width: calc(100% - 83px);
       .imge_title {
         margin-bottom: 0.7rem;
         font-size: 95%;
@@ -76,6 +79,35 @@
         &::before {
           width: 100%;
         }
+      }
+    }
+    .svg {
+      position: absolute;
+      left: auto;
+      top: 57%;
+      right: 10px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      visibility: hidden;
+      opacity: 0;
+      @include WBUtransition();
+    }
+    &.complete {
+      .svg.icone_complete {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+    &:hover {
+      .svg.icone_complete {
+        visibility: hidden;
+        opacity: 0;
+        transition-duration: 0.1s;
+      }
+      .svg.icone_remove {
+        visibility: visible;
+        opacity: 1;
+        fill: #f00;
       }
     }
     + .container_image {
