@@ -49,6 +49,12 @@ class DragAndDropFiles extends FormElementBase {
     if (!empty($element['#drag_and_drop_files_type']) && in_array($element['#drag_and_drop_files_type'], $types)) {
       $accept = $element['#drag_and_drop_files_type'];
     }
+    if (str_contains($element['#drag_and_drop_files_type'], "image/")) {
+      $element['#theme'] = 'drag_and_drop_files_image';
+    }
+    if (str_contains($element['#drag_and_drop_files_type'], "video/")) {
+      $element['#theme'] = 'drag_and_drop_files_video';
+    }
     /**
      * On enregistre le fichier via ajax.
      *
@@ -75,7 +81,6 @@ class DragAndDropFiles extends FormElementBase {
         ]
       ]
     ];
-    
     return $element;
   }
   

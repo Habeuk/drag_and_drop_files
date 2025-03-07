@@ -11,14 +11,14 @@ use Drupal\webform\WebformSubmissionInterface;
  * Définit un élément Webform pour l'upload d'image par Drag & Drop.
  *
  * @WebformElement(
- *   id = "drag_and_drop_files_image",
- *   label = @Translation("Drag & Drop Image"),
+ *   id = "drag_and_drop_files_video",
+ *   label = @Translation("Drag & Drop video"),
  *   category = @Translation("Custom Elements"),
  *   multiline = TRUE,
  *   composite = FALSE,
  * )
  */
-class WebformCustomDndImage extends WebformCustomDnd {
+class WebformCustomDndVideo extends WebformCustomDnd {
   
   /**
    * Affichage de l'element.
@@ -27,6 +27,6 @@ class WebformCustomDndImage extends WebformCustomDnd {
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
-    $element['#drag_and_drop_files_type'] = 'image/*';
+    $element['#drag_and_drop_files_type'] = 'video/*';
   }
 }
