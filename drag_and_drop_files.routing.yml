@@ -1,3 +1,12 @@
+drag_and_drop_files.get_img_url:
+  path: '/drag_and_drop_files/get_img_url/{fid}'
+  defaults:
+    _controller: '\Drupal\drag_and_drop_files\Controller\UploadController::getImageUrl'
+    _title: 'Upload via Drag & Drop'
+  methods: [GET]
+  requirements:
+    _permission: 'Upload files'
+
 drag_and_drop_files.upload:
   path: '/drag_and_drop_files/upload'
   defaults:
@@ -5,4 +14,4 @@ drag_and_drop_files.upload:
     _title: 'Upload via Drag & Drop'
   methods: [POST]
   requirements:
-    _permission: 'upload files'
+    _permission: 'Upload files'

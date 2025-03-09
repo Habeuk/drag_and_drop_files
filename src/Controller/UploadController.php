@@ -13,20 +13,32 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UploadController extends ControllerBase {
   
+  /**
+   * Build the Styled image.
+   */
+  public function getImageUrl($fid) {
+    $file = \Drupal\file\Entity\File::load($fid);
+    $datas = [];
+    if ($file) {
+      // $datas = $file->toArray();
+      $datas['filename'] = $file->getFilename();
+      $datas['url'] = \Drupal::service('file_system')->realpath($file->getFileUri());
+    }
+    //
+    return new JsonResponse($datas);
+  }
+  
+  /**
+   *
+   * @param Request $request
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
   public function handleUpload(Request $request) {
     $file = $request->files->get('file');
     $error = [];
-    
-    // Validation du fichier
-    if (!str_contains($file->getClientMimeType(), "image/")) {
-      $error[] = 'Seuls les fichiers PNG/JPEG sont autorisés.';
-      $error['mine-type'] = $file->getClientMimeType();
-    }
-    
-    if ($file->getSize() > 20 * 1024 * 1024) { // 20 Mo
+    if ($file->getSize() > 40 * 1024 * 1024) { // 40 Mo
       $error[] = 'Le fichier est trop volumineux.';
     }
-    
     if (empty($error)) {
       // Enregistrez le fichier dans le système Drupal
       $destination = 'public://dnd-uploads/';
@@ -41,17 +53,14 @@ class UploadController extends ControllerBase {
         ]);
       
       $file_entity->save();
-      
       // Déplacez le fichier temporaire vers la destination finale
       move_uploaded_file($file->getRealPath(), $file_entity->getFileUri());
-      
       return new JsonResponse([
         'fid' => $file_entity->id(),
         'url' => \Drupal::service('file_url_generator')->generateAbsoluteString($file_entity->getFileUri()),
         'filename' => $file_entity->getFilename()
       ]);
     }
-    
     return new JsonResponse([
       'errors' => $error
     ], 400);

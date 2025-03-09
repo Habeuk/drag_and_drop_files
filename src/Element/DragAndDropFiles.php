@@ -5,6 +5,7 @@ namespace Drupal\drag_and_drop_files\Element;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Element\ManagedFile;
 use Drupal\Core\Render\Element\FormElementBase;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Définit un élément de formulaire personnalisé pour le Drag & Drop.
@@ -41,6 +42,12 @@ class DragAndDropFiles extends FormElementBase {
   public static function process(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Ajoutez les bibliothèques CSS/JS.
     $element['#attached']['library'][] = 'drag_and_drop_files/dnd';
+    // Passer les variables ne servent à rien car, les données doivent ere
+    // traiter au bloc par bloc., on va passer par le html.
+    // $element['#attached']['drupalSettings']['drag_and_drop_files']['type'] =
+    // $element['#drag_and_drop_files_type'];
+    
+    //
     $types = [
       'image/*',
       'video/*'
@@ -60,7 +67,7 @@ class DragAndDropFiles extends FormElementBase {
      *
      * @var string $name
      */
-    $name = !empty($element['#name']) ? $element['#name'] . 'dnd' : 'dnd_upload';
+    $name = !empty($element['#name']) ? $element['#name'] : 'dnd_upload';
     $element[$name] = [
       '#type' => 'file',
       '#name' => $name,
@@ -78,9 +85,21 @@ class DragAndDropFiles extends FormElementBase {
       '#attributes' => [
         'class' => [
           'drag_and_drop_files--fids'
-        ]
+        ],
+        'type' => $element['#drag_and_drop_files_type']
       ]
     ];
+    if (!empty($element['#default_value'])) {
+      $element[$name . '-fid']['#default_value'] = $element['#default_value'];
+      // $element['#attached']['drupalSettings']['drag_and_drop_files']['default_value']
+      // = Json::decode($element['#default_value']);
+    }
+    if (!empty($element['#value'])) {
+      $element[$name . '-fid']['#value'] = $element['#value'];
+      // $element['#attached']['drupalSettings']['drag_and_drop_files']['value']
+      // = Json::decode($element['#value']);
+    }
+    $element['#attributes']['type'] = $element['#drag_and_drop_files_type'];
     return $element;
   }
   

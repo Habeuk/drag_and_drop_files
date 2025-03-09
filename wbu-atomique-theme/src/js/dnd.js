@@ -6,7 +6,8 @@ import DragAndDrop from "./drag-and-drop";
     attach: function (context, settings) {
       const dropzones = once("drag_and_drop_files_run", ".dnd-dropzone", context);
       if (dropzones && dropzones.length) {
-        const dnd = new DragAndDrop(dropzones, settings);
+        const configs = settings.drag_and_drop_files ? settings.drag_and_drop_files : {};
+        const dnd = new DragAndDrop(dropzones, configs);
         dnd.build();
       }
     },

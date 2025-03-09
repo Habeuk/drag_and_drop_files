@@ -96,7 +96,7 @@ class WebformCustomDnd extends WebformElementBase {
     $value = $webform_submission->getElementData($element['#webform_key']);
     // Exemple : Formater la valeur (ajouter un préfixe ou un suffixe)
     if (!empty($value)) {
-      $webform_submission->setElementData($element['#webform_key'], Json::encode($value));
+      $webform_submission->setElementData($element['#webform_key'], $value['fid']);
     }
   }
 }
