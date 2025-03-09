@@ -22,7 +22,7 @@ class UploadController extends ControllerBase {
     if ($file) {
       // $datas = $file->toArray();
       $datas['filename'] = $file->getFilename();
-      $datas['url'] = \Drupal::service('file_system')->realpath($file->getFileUri());
+      $datas['url'] = \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
     }
     //
     return new JsonResponse($datas);

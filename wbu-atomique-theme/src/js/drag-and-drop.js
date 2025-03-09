@@ -1,6 +1,6 @@
 class DragAndDrop {
-  constructor(dropzones, configs = []) {
-    this.dropzones = dropzones;
+  constructor(dropzone, configs = []) {
+    this.dropzone = dropzone;
     this.configs = configs;
     this.fids = [];
   }
@@ -9,31 +9,28 @@ class DragAndDrop {
    * Initialisation
    */
   build() {
-    // window.addEventListener("load", () => {
-    this.dropzones.forEach((dropzone) => {
-      const fileInput = dropzone.parentNode.querySelector(".dnd-file-input");
-      const previews = dropzone.parentNode.querySelector(".dnd-previews");
-      const type = dropzone.parentNode.getAttribute("type");
-      this.manageDragZone(dropzone, fileInput);
-      this.uploadFiles(dropzone, fileInput, previews, type);
-      if (!type.includes("image")) {
-        previews.classList.add("files-document");
-      }
-      this.ManageOldFile(dropzone, fileInput, previews, type);
-    });
-    //});
+    const dropzone = this.dropzone;
+    const fileInput = dropzone.parentNode.querySelector(".dnd-file-input");
+    const previews = dropzone.parentNode.querySelector(".dnd-previews");
+    const type = dropzone.parentNode.getAttribute("type");
+    this.manageDragZone(dropzone, fileInput);
+    this.uploadFiles(dropzone, fileInput, previews, type);
+    if (!type.includes("image")) {
+      previews.classList.add("files-document");
+    }
+    this.ManageOldFile(dropzone, fileInput, previews, type);
   }
 
   ManageOldFile(dropzone, fileInput, previews, type) {
     const fidInput = dropzone.parentNode.querySelector("input.drag_and_drop_files--fids");
-    if (fidInput) {
-      // On affiche le preview.
-      const generatedElement = this.previewBoxImage();
-      previews.appendChild(generatedElement.container_image);
-      //
-      const fids = JSON.parse(fidInput.value);
+    const fids = fidInput.value ? JSON.parse(fidInput.value) : [];
+    const generatedElements = {};
+    if (fidInput && fids.length > 0) {
       fids.forEach((fid) => {
-        console.log("fid : ", fid);
+        // On affiche le preview.
+        generatedElements[fid] = this.previewBoxImage();
+        previews.appendChild(generatedElements[fid].container_image);
+        //
         fetch("/drag_and_drop_files/get_img_url/" + fid, {
           method: "GET",
           headers: {
@@ -45,7 +42,8 @@ class DragAndDrop {
             return response.json();
           })
           .then((data) => {
-            if (data.url) this.presaveFiles(dropzone, fileInput, generatedElement, data, previews, type);
+            if (!data.fid) data.fid = fid;
+            this.presaveFiles(dropzone, fileInput, generatedElements[fid], data, previews, type);
           })
           .catch((error) => {
             console.error("Erreur:", error);
@@ -109,27 +107,41 @@ class DragAndDrop {
       fileInput.click();
     });
   }
-
+  /**
+   * Ajoute l'id du fichier dans un champs.
+   * @param {*} dropzone
+   * @param {*} fileInput
+   * @param {*} generatedElement
+   * @param {*} data
+   * @param {*} previews
+   * @param {*} type
+   */
   presaveFiles(dropzone, fileInput, generatedElement, data, previews, type) {
     if (!this.fids.includes(data.fid)) {
       this.fids.push(data.fid);
     }
     const putInInput = () => {
       const fidInput = dropzone.parentNode.querySelector("input.drag_and_drop_files--fids");
-      console.log("fidInput: ", fidInput, "\n dropzone : ", dropzone);
       if (fidInput) fidInput.value = JSON.stringify(this.fids);
     };
     // Affiche l'aperçu
-    if (type.includes("image")) {
-      generatedElement.content_bg.style.backgroundImage = `url(${data.url})`;
-    } else if (type.includes("video")) {
-      generatedElement.content_bg.style.backgroundImage = "url(/modules/contrib/drag_and_drop_files/images/video-player.svg)";
+    if (!data.url) {
+      generatedElement.content_bg.style.backgroundImage = "url(/modules/contrib/drag_and_drop_files/images/file-not-found-2.jpg)";
+      data.filename = "Image non disponible";
     } else {
-      generatedElement.content_bg.style.backgroundImage = "url(/modules/contrib/drag_and_drop_files/images/free-file-icon.png)";
+      if (type.includes("image")) {
+        generatedElement.content_bg.style.backgroundImage = `url(${data.url})`;
+      } else if (type.includes("video")) {
+        generatedElement.content_bg.style.backgroundImage = "url(/modules/contrib/drag_and_drop_files/images/video-player.svg)";
+      } else {
+        generatedElement.content_bg.style.backgroundImage = "url(/modules/contrib/drag_and_drop_files/images/free-file-icon.png)";
+      }
     }
     //
 
     generatedElement.imge_title.innerHTML = data.filename;
+    generatedElement.imge_title.setAttribute("href", data.url);
+    generatedElement.imge_title.setAttribute("download", data.filename);
     generatedElement.progressbar.classList.add("complete");
     generatedElement.container_image.classList.add("complete");
     generatedElement.icone_remove.addEventListener("click", () => {
@@ -149,7 +161,7 @@ class DragAndDrop {
       container_image: document.createElement("div"),
       content_bg: document.createElement("div"),
       content_text: document.createElement("div"),
-      imge_title: document.createElement("span"),
+      imge_title: document.createElement("a"),
       progressbar: document.createElement("span"),
       icone_complete: document.createElement("span"),
       icone_remove: document.createElement("span"),
@@ -157,13 +169,12 @@ class DragAndDrop {
     generatedElement.container_image.classList.add("container_image");
     generatedElement.content_bg.classList.add("content_bg");
     generatedElement.content_text.classList.add("content_text");
-    generatedElement.imge_title.classList.add("imge_title");
+    generatedElement.imge_title.classList.add("imge_title", "text-black", "fw-bold");
     generatedElement.progressbar.classList.add("progressbar");
     generatedElement.icone_complete.classList.add("icone_complete", "svg");
     generatedElement.icone_remove.classList.add("icone_remove", "svg");
-    //
     generatedElement.imge_title.innerHTML = "Chargement encours ...";
-    //
+    generatedElement.imge_title.setAttribute("href", "#");
     generatedElement.content_text.appendChild(generatedElement.imge_title);
     generatedElement.content_text.appendChild(generatedElement.progressbar);
     generatedElement.content_text.appendChild(generatedElement.icone_complete);
