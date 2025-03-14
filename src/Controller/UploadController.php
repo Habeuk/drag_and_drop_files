@@ -5,6 +5,8 @@ namespace Drupal\drag_and_drop_files\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformElementManagerInterface;
 
 /**
  *
@@ -34,6 +36,28 @@ class UploadController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    */
   public function handleUpload(Request $request) {
+    // On charge la configuration du champs.
+    // Charger le Webform.
+    // $webform_id = 'user_liste_de_produits';
+    // $field_webform = 'images';
+    // $webform = Webform::load($webform_id);
+    // if ($webform) {
+    // $elements = $webform->getElementsDecoded();
+    // dump($elements['container_container']['container_images'][$field_webform]);
+    // if
+    // (isset($elements['container_container']['container_images'][$field_webform]))
+    // {
+    // // Récupérer le gestionnaire d'éléments Webform.
+    // $element_manager = \Drupal::service('plugin.manager.webform.element');
+    // // Obtenir la définition du type de champ.
+    // $field_type =
+    // $elements['container_container']['container_images'][$field_webform]['#type'];
+    // $field_definition = $element_manager->getDefinition($field_type);
+    // // Afficher la configuration et la définition du champ.
+    // dd($field_definition);
+    // }
+    // }
+    //
     $file = $request->files->get('file');
     $error = [];
     if ($file->getSize() > 40 * 1024 * 1024) { // 40 Mo
@@ -49,7 +73,7 @@ class UploadController extends ControllerBase {
           'uid' => \Drupal::currentUser()->id(),
           'filename' => $file->getClientOriginalName(),
           'uri' => $destination . $file->getClientOriginalName(),
-          'status' => 0 // pendant la phase de test.
+          'status' => 1 // pendant la phase de test.
         ]);
       
       $file_entity->save();

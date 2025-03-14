@@ -26,8 +26,8 @@ class WebformCustomDnd extends WebformElementBase {
    */
   protected function defineDefaultProperties() {
     return [
-      'max_filesize' => '2MB',
-      'file_extensions' => 'png jpg jpeg',
+      'max_filesize' => 2,
+      'file_extensions' => '*',
       'upload_location' => 'public://webform-dnd'
     ] + parent::defineDefaultProperties();
   }
@@ -47,16 +47,16 @@ class WebformCustomDnd extends WebformElementBase {
     ];
     
     $form['file']['max_filesize'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Maximum file size'),
+      '#type' => 'number',
+      '#title' => $this->t('Maximum file size in MB'),
       '#default_value' => $this->getDefaultProperty('max_filesize')
     ];
     
-    $form['file']['file_extensions'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Allowed file extensions'),
-      '#default_value' => $this->getDefaultProperty('file_extensions')
-    ];
+    // $form['file']['file_extensions'] = [
+    // '#type' => 'textfield',
+    // '#title' => $this->t('Allowed file extensions'),
+    // '#default_value' => $this->getDefaultProperty('file_extensions')
+    // ];
     
     $form['file']['upload_location'] = [
       '#type' => 'textfield',
@@ -81,6 +81,8 @@ class WebformCustomDnd extends WebformElementBase {
     // // Structure de l'élément
     // $element['#theme'] = 'webform_custom_dnd_image';
     $element['#type'] = 'drag_and_drop_files';
+    $max_filesize = (int) $this->getDefaultProperty('max_filesize');
+    $element['#drag_and_drop_files_size'] = $max_filesize > 0 ? $max_filesize : 2;
     // $element['#process'][] = [
     // '\Drupal\drag_and_drop_files\Element\DragAndDropFiles',
     // 'process'

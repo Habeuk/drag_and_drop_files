@@ -28,7 +28,8 @@ class DragAndDropFiles extends FormElementBase {
       '#pre_render' => [
         $class . '::preRender'
       ],
-      '#drag_and_drop_files_type' => '*'
+      '#drag_and_drop_files_type' => '*',
+      '#drag_and_drop_files_size' => 40 // 40Mo
     ];
   }
   
@@ -42,12 +43,11 @@ class DragAndDropFiles extends FormElementBase {
   public static function process(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Ajoutez les bibliothèques CSS/JS.
     $element['#attached']['library'][] = 'drag_and_drop_files/dnd';
-    // Passer les variables ne servent à rien car, les données doivent ere
+    // Passer les variables ne servent à rien car, les données doivent etre
     // traiter au bloc par bloc., on va passer par le html.
     // $element['#attached']['drupalSettings']['drag_and_drop_files']['type'] =
     // $element['#drag_and_drop_files_type'];
     
-    //
     $types = [
       'image/*',
       'video/*'
@@ -61,6 +61,9 @@ class DragAndDropFiles extends FormElementBase {
     }
     if (str_contains($element['#drag_and_drop_files_type'], "video/")) {
       $element['#theme'] = 'drag_and_drop_files_video';
+    }
+    if (empty($element['#drag_and_drop_files_size'])) {
+      //
     }
     /**
      * On enregistre le fichier via ajax.
